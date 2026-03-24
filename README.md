@@ -47,15 +47,7 @@ npm run dev
 
 Uygulama: `http://localhost:5173`
 
-## 🔐 Giriş Bilgileri
 
-| Rol | E-posta | Şifre |
-|-----|---------|-------|
-| Admin | aysenur@gympro.com | Ayse1234* |
-| Eğitmen | fatma@gympro.com | Fatma1234* |
-| Üye | ahmet@gympro.com | Uye12345* |
-| Üye | zeynep@gympro.com | Uye12345* |
-| Üye | mehmet@gympro.com | Uye12345* |
 
 ## 📂 Proje Yapısı
 
@@ -80,6 +72,3 @@ gym-management/
 └── README.md
 ```
 
-## 👩‍💻 Geliştirici
-
-**Ayşenur Dik**
