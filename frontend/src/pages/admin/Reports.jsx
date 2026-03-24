@@ -78,6 +78,36 @@ const Reports = () => {
                             </div>
                         </div>
                     </div>
+
+                    {/* Paket Dağılımı - Görsel Özet */}
+                    {revenue.distribution && Object.keys(revenue.distribution).length > 0 && (
+                        <div className="glass-card" style={{ marginBottom: '24px', padding: '24px' }}>
+                            <h3 style={{ marginBottom: '16px', fontSize: '1.1rem' }}>Paket Bazlı Gelir Dağılımı</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {Object.entries(revenue.distribution).map(([name, amount]) => {
+                                    const percentage = (amount / revenue.totalRevenue) * 100;
+                                    return (
+                                        <div key={name}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.9rem' }}>
+                                                <span>{name}</span>
+                                                <span style={{ fontWeight: 600 }}>₺{amount.toLocaleString()} ({percentage.toFixed(1)}%)</span>
+                                            </div>
+                                            <div style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
+                                                <div style={{
+                                                    height: '100%',
+                                                    width: `${percentage}%`,
+                                                    background: 'linear-gradient(90deg, #ffd700, #ffae00)',
+                                                    borderRadius: '4px',
+                                                    transition: 'width 1s ease-in-out'
+                                                }}></div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
                     <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
                         <table className="data-table">
                             <thead>
@@ -101,24 +131,55 @@ const Reports = () => {
             )}
 
             {tab === 'attendance' && (
-                <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
-                    <table className="data-table">
-                        <thead>
-                            <tr><th>Üye</th><th>Antrenör</th><th>Tarih</th><th>Giriş</th><th>Çıkış</th></tr>
-                        </thead>
-                        <tbody>
-                            {attendance.attendance?.map(a => (
-                                <tr key={a._id}>
-                                    <td style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{a.user?.name}</td>
-                                    <td>{a.trainer?.name || '-'}</td>
-                                    <td>{new Date(a.date).toLocaleDateString('tr-TR')}</td>
-                                    <td>{new Date(a.checkIn).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</td>
-                                    <td>{a.checkOut ? new Date(a.checkOut).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : <span className="badge badge-warning">Devam ediyor</span>}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    {attendance.attendance?.length === 0 && <div className="empty-state"><p>Devam kaydı bulunamadı</p></div>}
+                <div>
+                    {/* Antrenör Popülerliği - Görsel Özet */}
+                    {attendance.distribution && Object.keys(attendance.distribution).length > 0 && (
+                        <div className="glass-card" style={{ marginBottom: '24px', padding: '24px' }}>
+                            <h3 style={{ marginBottom: '16px', fontSize: '1.1rem' }}>Antrenör Bazlı Ders Yoğunluğu</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
+                                {Object.entries(attendance.distribution).map(([name, count]) => {
+                                    const percentage = (count / attendance.count) * 100;
+                                    return (
+                                        <div key={name} className="glass-card" style={{ padding: '16px', background: 'rgba(255,255,255,0.02)' }}>
+                                            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>{name}</p>
+                                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                                                <h4 style={{ fontSize: '1.5rem', margin: 0 }}>{count}</h4>
+                                                <span style={{ fontSize: '0.8rem', color: 'var(--success)' }}>kayıt</span>
+                                            </div>
+                                            <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', marginTop: '12px', overflow: 'hidden' }}>
+                                                <div style={{
+                                                    height: '100%',
+                                                    width: `${percentage}%`,
+                                                    background: 'var(--primary)',
+                                                    borderRadius: '2px'
+                                                }}></div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+                        <table className="data-table">
+                            <thead>
+                                <tr><th>Üye</th><th>Antrenör</th><th>Tarih</th><th>Giriş</th><th>Çıkış</th></tr>
+                            </thead>
+                            <tbody>
+                                {attendance.attendance?.map(a => (
+                                    <tr key={a._id}>
+                                        <td style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{a.user?.name}</td>
+                                        <td>{a.trainer?.name || '-'}</td>
+                                        <td>{new Date(a.date).toLocaleDateString('tr-TR')}</td>
+                                        <td>{new Date(a.checkIn).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</td>
+                                        <td>{a.checkOut ? new Date(a.checkOut).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : <span className="badge badge-warning">Devam ediyor</span>}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        {attendance.attendance?.length === 0 && <div className="empty-state"><p>Devam kaydı bulunamadı</p></div>}
+                    </div>
                 </div>
             )}
         </div>

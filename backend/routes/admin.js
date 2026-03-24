@@ -122,7 +122,14 @@ router.get('/reports/revenue', async (req, res) => {
 
         const totalRevenue = payments.reduce((sum, p) => sum + p.amount, 0);
 
-        res.json({ totalRevenue, payments, count: payments.length });
+        // Paket dağılımı
+        const distribution = {};
+        payments.forEach(p => {
+            const pkgName = p.enrollment?.package?.name || 'Diğer';
+            distribution[pkgName] = (distribution[pkgName] || 0) + p.amount;
+        });
+
+        res.json({ totalRevenue, payments, count: payments.length, distribution });
     } catch (error) {
         res.status(500).json({ message: 'Sunucu hatası', error: error.message });
     }
@@ -144,7 +151,14 @@ router.get('/reports/attendance', async (req, res) => {
             .populate('trainer', 'name')
             .sort({ date: -1 });
 
-        res.json({ attendance, count: attendance.length });
+        // Antrenör popülerliği (devam kaydı sayısı)
+        const distribution = {};
+        attendance.forEach(a => {
+            const trainerName = a.trainer?.name || 'Diğer';
+            distribution[trainerName] = (distribution[trainerName] || 0) + 1;
+        });
+
+        res.json({ attendance, count: attendance.length, distribution });
     } catch (error) {
         res.status(500).json({ message: 'Sunucu hatası', error: error.message });
     }
