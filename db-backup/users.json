@@ -1,0 +1,145 @@
+[
+  {
+    "_id": "69c2acc339d4041f56cc5526",
+    "name": "Deniz Koç",
+    "email": "deniz@gympro.com",
+    "role": "member",
+    "phone": "0544 555 6666",
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:51.939Z",
+    "updatedAt": "2026-03-24T15:24:51.939Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2acc339d4041f56cc5523",
+    "name": "Burak Yılmaz",
+    "email": "burak@gympro.com",
+    "role": "member",
+    "phone": "0544 333 4444",
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:51.880Z",
+    "updatedAt": "2026-03-24T15:24:51.880Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2acc339d4041f56cc5520",
+    "name": "Elif Şahin",
+    "email": "elif@gympro.com",
+    "role": "member",
+    "phone": "0544 111 2222",
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:51.821Z",
+    "updatedAt": "2026-03-24T15:24:51.821Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2acc339d4041f56cc551d",
+    "name": "Kerem Öztürk",
+    "email": "kerem@gympro.com",
+    "role": "member",
+    "phone": "0555 000 0000",
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:51.757Z",
+    "updatedAt": "2026-03-24T15:24:51.757Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2acc339d4041f56cc551a",
+    "name": "Buse Çelik",
+    "email": "buse@gympro.com",
+    "role": "member",
+    "phone": "0555 999 9999",
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:51.699Z",
+    "updatedAt": "2026-03-24T15:24:51.699Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2acc339d4041f56cc5517",
+    "name": "Murat Aydın",
+    "email": "murat@gympro.com",
+    "role": "trainer",
+    "phone": "0555 888 8888",
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:51.640Z",
+    "updatedAt": "2026-03-24T15:24:51.640Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2acc339d4041f56cc5514",
+    "name": "Selin Aktaş",
+    "email": "selin@gympro.com",
+    "role": "trainer",
+    "phone": "0555 777 7777",
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:51.581Z",
+    "updatedAt": "2026-03-24T15:24:51.581Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2acc339d4041f56cc5511",
+    "name": "Caner Özcan",
+    "email": "caner@gympro.com",
+    "role": "trainer",
+    "phone": "0555 666 6666",
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:51.520Z",
+    "updatedAt": "2026-03-24T15:24:51.520Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c298f88a76d357cbefea95",
+    "name": "Mehmet Demir",
+    "email": "mehmet@gympro.com",
+    "role": "member",
+    "phone": "0555 555 5555",
+    "isActive": true,
+    "createdAt": "2026-03-24T14:00:24.001Z",
+    "updatedAt": "2026-03-24T14:00:24.001Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c298f78a76d357cbefea92",
+    "name": "Zeynep Kaya",
+    "email": "zeynep@gympro.com",
+    "role": "member",
+    "phone": "0555 444 4444",
+    "isActive": true,
+    "createdAt": "2026-03-24T14:00:23.935Z",
+    "updatedAt": "2026-03-24T14:00:23.935Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c298f78a76d357cbefea8f",
+    "name": "Ahmet Yıldız",
+    "email": "ahmet@gympro.com",
+    "role": "member",
+    "phone": "0555 333 3333",
+    "isActive": true,
+    "createdAt": "2026-03-24T14:00:23.870Z",
+    "updatedAt": "2026-03-24T14:00:23.870Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c298b98a76d357cbefea8c",
+    "name": "Fatma Yılmaz",
+    "email": "fatma@gympro.com",
+    "role": "trainer",
+    "phone": "0555 222 2222",
+    "isActive": true,
+    "createdAt": "2026-03-24T13:59:21.290Z",
+    "updatedAt": "2026-03-24T13:59:21.290Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c295f5495f8d3c92932d54",
+    "name": "Ayşenur Dik",
+    "email": "aysenur@gympro.com",
+    "role": "admin",
+    "phone": "0555 111 1111",
+    "isActive": true,
+    "createdAt": "2026-03-24T13:47:33.444Z",
+    "updatedAt": "2026-03-24T13:47:33.444Z",
+    "__v": 0
+  }
+]

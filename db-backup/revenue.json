@@ -1,0 +1,370 @@
+{
+  "totalRevenue": 45700,
+  "payments": [
+    {
+      "_id": "69c2aed639d4041f56cc564d",
+      "user": {
+        "_id": "69c2acc339d4041f56cc551a",
+        "name": "Buse Çelik",
+        "email": "buse@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2aed639d4041f56cc564b",
+        "user": "69c2acc339d4041f56cc551a",
+        "package": {
+          "_id": "69c2acc439d4041f56cc552c",
+          "name": "Hafta Sonu Paketi"
+        },
+        "startDate": "2026-03-24T15:33:42.406Z",
+        "endDate": "2026-04-23T15:33:42.406Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:33:42.406Z",
+        "updatedAt": "2026-03-24T15:33:42.406Z",
+        "__v": 0
+      },
+      "amount": 3000,
+      "method": "card",
+      "paidAt": "2026-03-24T15:33:42.407Z",
+      "createdAt": "2026-03-24T15:33:42.407Z",
+      "updatedAt": "2026-03-24T15:33:42.407Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2aed639d4041f56cc5646",
+      "user": {
+        "_id": "69c2acc339d4041f56cc551d",
+        "name": "Kerem Öztürk",
+        "email": "kerem@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2aed639d4041f56cc5644",
+        "user": "69c2acc339d4041f56cc551d",
+        "package": {
+          "_id": "69c2acc439d4041f56cc552f",
+          "name": "6 Aylık Standart"
+        },
+        "startDate": "2026-03-24T15:33:42.347Z",
+        "endDate": "2026-09-20T15:33:42.347Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:33:42.347Z",
+        "updatedAt": "2026-03-24T15:33:42.347Z",
+        "__v": 0
+      },
+      "amount": 6000,
+      "method": "cash",
+      "paidAt": "2026-03-24T15:33:42.347Z",
+      "createdAt": "2026-03-24T15:33:42.347Z",
+      "updatedAt": "2026-03-24T15:33:42.347Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2aed639d4041f56cc563f",
+      "user": {
+        "_id": "69c2acc339d4041f56cc5520",
+        "name": "Elif Şahin",
+        "email": "elif@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2aed639d4041f56cc563d",
+        "user": "69c2acc339d4041f56cc5520",
+        "package": {
+          "_id": "69c2acc339d4041f56cc5529",
+          "name": "Öğrenci Paketi"
+        },
+        "startDate": "2026-03-24T15:33:42.287Z",
+        "endDate": "2026-04-23T15:33:42.287Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:33:42.288Z",
+        "updatedAt": "2026-03-24T15:33:42.288Z",
+        "__v": 0
+      },
+      "amount": 2000,
+      "method": "card",
+      "paidAt": "2026-03-24T15:33:42.288Z",
+      "createdAt": "2026-03-24T15:33:42.288Z",
+      "updatedAt": "2026-03-24T15:33:42.288Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2aed639d4041f56cc5638",
+      "user": {
+        "_id": "69c2acc339d4041f56cc5523",
+        "name": "Burak Yılmaz",
+        "email": "burak@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2aed639d4041f56cc5636",
+        "user": "69c2acc339d4041f56cc5523",
+        "package": {
+          "_id": "69c2acc439d4041f56cc552c",
+          "name": "Hafta Sonu Paketi"
+        },
+        "startDate": "2026-03-24T15:33:42.227Z",
+        "endDate": "2026-04-23T15:33:42.227Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:33:42.227Z",
+        "updatedAt": "2026-03-24T15:33:42.227Z",
+        "__v": 0
+      },
+      "amount": 3000,
+      "method": "cash",
+      "paidAt": "2026-03-24T15:33:42.228Z",
+      "createdAt": "2026-03-24T15:33:42.228Z",
+      "updatedAt": "2026-03-24T15:33:42.228Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2aed639d4041f56cc5631",
+      "user": {
+        "_id": "69c2acc339d4041f56cc5526",
+        "name": "Deniz Koç",
+        "email": "deniz@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2aed639d4041f56cc562f",
+        "user": "69c2acc339d4041f56cc5526",
+        "package": {
+          "_id": "69c2acc439d4041f56cc552f",
+          "name": "6 Aylık Standart"
+        },
+        "startDate": "2026-03-24T15:33:42.166Z",
+        "endDate": "2026-09-20T15:33:42.166Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:33:42.166Z",
+        "updatedAt": "2026-03-24T15:33:42.166Z",
+        "__v": 0
+      },
+      "amount": 6000,
+      "method": "card",
+      "paidAt": "2026-03-24T15:33:42.167Z",
+      "createdAt": "2026-03-24T15:33:42.167Z",
+      "updatedAt": "2026-03-24T15:33:42.167Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2ae3139d4041f56cc55e7",
+      "user": {
+        "_id": "69c2acc339d4041f56cc551a",
+        "name": "Buse Çelik",
+        "email": "buse@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2ae3139d4041f56cc55e5",
+        "user": "69c2acc339d4041f56cc551a",
+        "package": {
+          "_id": "69c2acc439d4041f56cc552c",
+          "name": "Hafta Sonu Paketi"
+        },
+        "startDate": "2026-03-24T15:30:57.509Z",
+        "endDate": "2026-04-23T15:30:57.509Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:30:57.510Z",
+        "updatedAt": "2026-03-24T15:30:57.510Z",
+        "__v": 0
+      },
+      "amount": 3000,
+      "method": "card",
+      "paidAt": "2026-03-24T15:30:57.510Z",
+      "createdAt": "2026-03-24T15:30:57.510Z",
+      "updatedAt": "2026-03-24T15:30:57.510Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2ae3139d4041f56cc55e0",
+      "user": {
+        "_id": "69c2acc339d4041f56cc551d",
+        "name": "Kerem Öztürk",
+        "email": "kerem@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2ae3139d4041f56cc55de",
+        "user": "69c2acc339d4041f56cc551d",
+        "package": {
+          "_id": "69c2acc439d4041f56cc552f",
+          "name": "6 Aylık Standart"
+        },
+        "startDate": "2026-03-24T15:30:57.449Z",
+        "endDate": "2026-09-20T15:30:57.449Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:30:57.449Z",
+        "updatedAt": "2026-03-24T15:30:57.449Z",
+        "__v": 0
+      },
+      "amount": 6000,
+      "method": "cash",
+      "paidAt": "2026-03-24T15:30:57.450Z",
+      "createdAt": "2026-03-24T15:30:57.450Z",
+      "updatedAt": "2026-03-24T15:30:57.450Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2ae3139d4041f56cc55d9",
+      "user": {
+        "_id": "69c2acc339d4041f56cc5520",
+        "name": "Elif Şahin",
+        "email": "elif@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2ae3139d4041f56cc55d7",
+        "user": "69c2acc339d4041f56cc5520",
+        "package": {
+          "_id": "69c2acc339d4041f56cc5529",
+          "name": "Öğrenci Paketi"
+        },
+        "startDate": "2026-03-24T15:30:57.389Z",
+        "endDate": "2026-04-23T15:30:57.389Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:30:57.389Z",
+        "updatedAt": "2026-03-24T15:30:57.389Z",
+        "__v": 0
+      },
+      "amount": 2000,
+      "method": "card",
+      "paidAt": "2026-03-24T15:30:57.389Z",
+      "createdAt": "2026-03-24T15:30:57.390Z",
+      "updatedAt": "2026-03-24T15:30:57.390Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2ae3139d4041f56cc55d2",
+      "user": {
+        "_id": "69c2acc339d4041f56cc5523",
+        "name": "Burak Yılmaz",
+        "email": "burak@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2ae3139d4041f56cc55d0",
+        "user": "69c2acc339d4041f56cc5523",
+        "package": {
+          "_id": "69c2acc439d4041f56cc552c",
+          "name": "Hafta Sonu Paketi"
+        },
+        "startDate": "2026-03-24T15:30:57.322Z",
+        "endDate": "2026-04-23T15:30:57.322Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:30:57.322Z",
+        "updatedAt": "2026-03-24T15:30:57.322Z",
+        "__v": 0
+      },
+      "amount": 3000,
+      "method": "cash",
+      "paidAt": "2026-03-24T15:30:57.322Z",
+      "createdAt": "2026-03-24T15:30:57.322Z",
+      "updatedAt": "2026-03-24T15:30:57.322Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2ae3139d4041f56cc55cb",
+      "user": {
+        "_id": "69c2acc339d4041f56cc5526",
+        "name": "Deniz Koç",
+        "email": "deniz@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2ae3139d4041f56cc55c9",
+        "user": "69c2acc339d4041f56cc5526",
+        "package": {
+          "_id": "69c2acc439d4041f56cc552f",
+          "name": "6 Aylık Standart"
+        },
+        "startDate": "2026-03-24T15:30:57.260Z",
+        "endDate": "2026-09-20T15:30:57.260Z",
+        "status": "active",
+        "createdAt": "2026-03-24T15:30:57.260Z",
+        "updatedAt": "2026-03-24T15:30:57.260Z",
+        "__v": 0
+      },
+      "amount": 6000,
+      "method": "card",
+      "paidAt": "2026-03-24T15:30:57.260Z",
+      "createdAt": "2026-03-24T15:30:57.260Z",
+      "updatedAt": "2026-03-24T15:30:57.260Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2a20739d4041f56cc542d",
+      "user": {
+        "_id": "69c298f88a76d357cbefea95",
+        "name": "Mehmet Demir",
+        "email": "mehmet@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2a20739d4041f56cc542b",
+        "user": "69c298f88a76d357cbefea95",
+        "package": {
+          "_id": "69c2a20739d4041f56cc53f2",
+          "name": "Yıllık VIP"
+        },
+        "startDate": "2026-03-24T14:39:03.747Z",
+        "endDate": "2027-03-24T14:39:03.747Z",
+        "status": "active",
+        "createdAt": "2026-03-24T14:39:03.747Z",
+        "updatedAt": "2026-03-24T14:39:03.747Z",
+        "__v": 0
+      },
+      "amount": 4000,
+      "method": "card",
+      "paidAt": "2026-03-24T14:39:03.747Z",
+      "createdAt": "2026-03-24T14:39:03.747Z",
+      "updatedAt": "2026-03-24T14:39:03.747Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2a20739d4041f56cc5426",
+      "user": {
+        "_id": "69c298f78a76d357cbefea92",
+        "name": "Zeynep Kaya",
+        "email": "zeynep@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2a20739d4041f56cc5424",
+        "user": "69c298f78a76d357cbefea92",
+        "package": {
+          "_id": "69c2a20739d4041f56cc53ef",
+          "name": "3 Aylık Premium"
+        },
+        "startDate": "2026-03-24T14:39:03.674Z",
+        "endDate": "2026-06-22T14:39:03.674Z",
+        "status": "active",
+        "createdAt": "2026-03-24T14:39:03.674Z",
+        "updatedAt": "2026-03-24T14:39:03.674Z",
+        "__v": 0
+      },
+      "amount": 1200,
+      "method": "card",
+      "paidAt": "2026-03-24T14:39:03.674Z",
+      "createdAt": "2026-03-24T14:39:03.674Z",
+      "updatedAt": "2026-03-24T14:39:03.674Z",
+      "__v": 0
+    },
+    {
+      "_id": "69c2a20739d4041f56cc541f",
+      "user": {
+        "_id": "69c298f78a76d357cbefea8f",
+        "name": "Ahmet Yıldız",
+        "email": "ahmet@gympro.com"
+      },
+      "enrollment": {
+        "_id": "69c2a20739d4041f56cc541d",
+        "user": "69c298f78a76d357cbefea8f",
+        "package": {
+          "_id": "69c2a20739d4041f56cc53ec",
+          "name": "Aylık Temel"
+        },
+        "startDate": "2026-03-24T14:39:03.611Z",
+        "endDate": "2026-04-23T14:39:03.611Z",
+        "status": "active",
+        "createdAt": "2026-03-24T14:39:03.611Z",
+        "updatedAt": "2026-03-24T14:39:03.611Z",
+        "__v": 0
+      },
+      "amount": 500,
+      "method": "card",
+      "paidAt": "2026-03-24T14:39:03.612Z",
+      "createdAt": "2026-03-24T14:39:03.612Z",
+      "updatedAt": "2026-03-24T14:39:03.612Z",
+      "__v": 0
+    }
+  ],
+  "count": 13
+}

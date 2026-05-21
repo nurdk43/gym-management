@@ -1,55 +1,66 @@
+
+
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import { FiShoppingCart } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const BuyPackage = () => {
-    const [packages, setPackages] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [buying, setBuying] = useState(null);
+    const navigate = useNavigate();
+    // ---- Durum Değişkenleri ----
+    const [paketler, setPaketler] = useState([]);
+    const [yukleniyor, setYukleniyor] = useState(true);
 
+    // ---- Paketleri API'den Getir ----
     useEffect(() => {
-        const fetch = async () => {
-            try { const res = await api.get('/member/packages'); setPackages(res.data); } catch (err) { console.error(err); }
-            setLoading(false);
+        const paketleriGetir = async () => {
+            try {
+                const yanit = await api.get('/member/packages');
+                setPaketler(yanit.data);
+            } catch (hata) { console.error(hata); }
+            setYukleniyor(false);
         };
-        fetch();
+        paketleriGetir();
     }, []);
 
-    const handleBuy = async (pkgId) => {
-        setBuying(pkgId);
-        try {
-            await api.post('/member/enroll', { packageId: pkgId, method: 'card' });
-            alert('Paket başarıyla satın alındı! 🎉');
-        } catch (err) {
-            alert(err.response?.data?.message || 'Bir hata oluştu');
-        }
-        setBuying(null);
+    // ---- Satın Alma İşlemi ----
+    const handleBuy = (pkgId) => {
+        navigate(`/member/payment/${pkgId}`);
     };
 
-    if (loading) return <div className="loading-spinner"><div className="spinner"></div></div>;
+    if (yukleniyor) return <div className="yukleme-spinner"><div className="yuk"></div></div>;
 
     return (
-        <div className="animate-fade-in">
-            <div className="page-header"><div><h1>Paket Satın Al</h1><p>Size uygun paketi seçin</p></div></div>
-            <div className="package-grid">
-                {packages.map((pkg, i) => (
-                    <div key={pkg._id} className="package-card animate-slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
-                        <h3>{pkg.name}</h3>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginTop: '8px' }}>{pkg.description || 'Profesyonel spor paketi'}</p>
-                        <div className="price">₺{pkg.price?.toLocaleString()} <span>/ {pkg.durationDays} gün</span></div>
-                        <ul className="features">
-                            <li>{pkg.durationDays} gün süre</li>
-                            {pkg.maxClasses > 0 ? <li>{pkg.maxClasses} ders hakkı</li> : <li>Sınırsız ders</li>}
-                            <li>Tüm ekipmanlara erişim</li>
-                            <li>Kişisel dolap</li>
+        <div className="an-sol">
+            {/* ---- Sayfa Başlığı ---- */}
+            <div className="sayfa-bas"><div><h1>Paket Satın Al</h1><p>Size uygun paketi seçin</p></div></div>
+
+            {/* ---- Paket Kartları ---- */}
+            <div className="istat-izgara">
+                {paketler.map((paket, i) => (
+                    <div key={paket._id} className="kart anim-yukari" style={{ animationDelay: `${i * 0.1}s`, display: 'flex', flexDirection: 'column' }}>
+                        <h3 style={{ fontSize: '24px', marginBottom: '8px' }}>{paket.name}</h3>
+                        <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '8px', marginBottom: '16px' }}>{paket.description || 'Profesyonel spor paketi'}</p>
+                        <div style={{ fontSize: '32px', fontWeight: '700', color: '#6c63ff', marginBottom: '24px' }}>₺{paket.price?.toLocaleString()} <span style={{ fontSize: '14px', color: '#64748b' }}> / {paket.durationDays} gün</span></div>
+                        <ul style={{ listStyle: 'none', padding: 0, marginBottom: '24px', flex: 1 }}>
+                            <li style={{ padding: '8px 0', color: '#94a3b8', fontSize: '14px' }}>✓ {paket.durationDays} gün süre</li>
+                            {paket.maxClasses > 0 ? <li style={{ padding: '8px 0', color: '#94a3b8', fontSize: '14px' }}>✓ {paket.maxClasses} ders hakkı</li> : <li style={{ padding: '8px 0', color: '#94a3b8', fontSize: '14px' }}>✓ Sınırsız ders</li>}
+                            <li style={{ padding: '8px 0', color: '#94a3b8', fontSize: '14px' }}>✓ Tüm ekipmanlara erişim</li>
+                            <li style={{ padding: '8px 0', color: '#94a3b8', fontSize: '14px' }}>✓ Kişisel dolap</li>
                         </ul>
-                        <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => handleBuy(pkg._id)} disabled={buying === pkg._id}>
-                            <FiShoppingCart /> {buying === pkg._id ? 'İşleniyor...' : 'Satın Al'}
+                        <button
+                            className="dugme dugme-bir"
+                            style={{ width: '100%', justifyContent: 'center' }}
+                            onClick={() => handleBuy(paket._id)}
+                        >
+                            <FiShoppingCart /> Satın Al
                         </button>
                     </div>
                 ))}
             </div>
-            {packages.length === 0 && <div className="glass-card"><div className="empty-state"><div className="empty-icon">📦</div><h3>Aktif paket yok</h3><p>Henüz satışta olan paket bulunmuyor</p></div></div>}
+
+            {/* ---- Boş Durum ---- */}
+            {paketler.length === 0 && <div className="kart"><div className="bos-durum"><div className="bos-ikon">📦</div><h3>Aktif paket yok</h3><p>Henüz satışta olan paket bulunmuyor</p></div></div>}
         </div>
     );
 };

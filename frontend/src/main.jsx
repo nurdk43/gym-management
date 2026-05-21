@@ -1,3 +1,8 @@
+// ==========================================
+// Uygulama Giriş Noktası
+// React uygulamasını DOM'a bağlar
+// ==========================================
+
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -5,6 +10,7 @@ import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import './index.css'
 
+// ---- React Uygulamasını Başlat ----
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <BrowserRouter>
@@ -15,11 +21,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </React.StrictMode>,
 )
 
-// Service Worker kaydı - PWA desteği
+// ---- Service Worker Kaydı (PWA desteği) ----
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-            .then((reg) => console.log('SW registered:', reg.scope))
-            .catch((err) => console.log('SW registration failed:', err));
+            .then((kayit) => console.log('SW kaydedildi:', kayit.scope))
+            .catch((hata) => console.log('SW kaydı başarısız:', hata));
     });
 }

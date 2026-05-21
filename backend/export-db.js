@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
+const connectDB = require('./config/db');
 
 // Import all models
 require('./models/User');
@@ -12,9 +13,7 @@ require('./models/Attendance');
 
 async function exportDB() {
     try {
-        await mongoose.connect('mongodb://localhost:27017/gym-management', {
-            serverSelectionTimeoutMS: 3000
-        });
+        await connectDB();
         console.log('MongoDB bağlantısı başarılı');
 
         const outDir = path.join(__dirname, '..', 'db-backup');
@@ -30,6 +29,7 @@ async function exportDB() {
         }
 
         console.log('\n🎉 Tüm veriler başarıyla dışa aktarıldı!');
+        console.log(`📂 Konum: ${outDir}`);
         await mongoose.disconnect();
         process.exit(0);
     } catch (err) {

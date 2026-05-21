@@ -1,55 +1,69 @@
+// ==========================================
+// Yönetici Dashboard Sayfası
+// Spor salonunun genel istatistiklerini gösterir
+// ==========================================
+
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import StatsCard from '../../components/StatsCard';
 import { FiUsers, FiDollarSign, FiActivity, FiUserCheck } from 'react-icons/fi';
 
 const AdminDashboard = () => {
-    const [stats, setStats] = useState({});
-    const [loading, setLoading] = useState(true);
+    // ---- Durum Değişkenleri ----
+    const [istatistikler, setIstatistikler] = useState({});
+    const [yukleniyor, setYukleniyor] = useState(true);
 
+    // ---- İstatistikleri API'den Çek ----
     useEffect(() => {
-        const fetchStats = async () => {
+        const istatistikleriGetir = async () => {
             try {
-                const res = await api.get('/admin/stats');
-                setStats(res.data);
-            } catch (err) { console.error(err); }
-            setLoading(false);
+                const yanit = await api.get('/admin/stats');
+                setIstatistikler(yanit.data);
+            } catch (hata) { console.error(hata); }
+            setYukleniyor(false);
         };
-        fetchStats();
+        istatistikleriGetir();
     }, []);
 
-    if (loading) return <div className="loading-spinner"><div className="spinner"></div></div>;
+    // ---- Yükleniyor ----
+    if (yukleniyor) return <div className="yukleme-kaps"><div className="yukleme"></div></div>;
 
     return (
-        <div className="animate-fade-in">
-            <div className="page-header">
+        <div className="anim-soluk">
+            {/* ---- Sayfa Başlığı ---- */}
+            <div className="sayfa-bas">
                 <div>
                     <h1>Dashboard</h1>
                     <p>Spor salonunuzun genel durumu</p>
                 </div>
             </div>
 
-            <div className="stats-grid">
-                <StatsCard icon={<FiUsers />} value={stats.totalMembers || 0} label="Toplam Üye" color="purple" delay={0.1} />
-                <StatsCard icon={<FiUserCheck />} value={stats.totalTrainers || 0} label="Antrenör" color="blue" delay={0.2} />
-                <StatsCard icon={<FiActivity />} value={stats.activeEnrollments || 0} label="Aktif Üyelik" color="green" delay={0.3} />
-                <StatsCard icon={<FiDollarSign />} value={`₺${(stats.totalRevenue || 0).toLocaleString()}`} label="Toplam Gelir" color="yellow" delay={0.4} />
+            {/* ---- İstatistik Kartları ---- */}
+            <div className="istat-izgara">
+                <StatsCard icon={<FiUsers />} value={istatistikler.totalMembers || 0} label="Toplam Üye" color="mor" delay={0.1} />
+                <StatsCard icon={<FiUserCheck />} value={istatistikler.totalTrainers || 0} label="Antrenör" color="mavi" delay={0.2} />
+                <StatsCard icon={<FiActivity />} value={istatistikler.activeEnrollments || 0} label="Aktif Üyelik" color="yesil" delay={0.3} />
+                <StatsCard icon={<FiDollarSign />} value={`₺${(istatistikler.totalRevenue || 0).toLocaleString()}`} label="Toplam Gelir" color="sari" delay={0.4} />
             </div>
 
-            <div className="stats-grid">
-                <div className="glass-card animate-slide-up stagger-2">
-                    <h3 className="section-title">📊 Aylık Gelir</h3>
-                    <div style={{ fontSize: '36px', fontWeight: '800', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                        ₺{(stats.monthlyRevenue || 0).toLocaleString()}
+            {/* ---- Detay Kartları ---- */}
+            <div className="istat-izgara">
+                {/* Aylık Gelir */}
+                <div className="kart anim-yukari kademe-2">
+                    <h3 className="bolum-bas">📊 Aylık Gelir</h3>
+                    <div style={{ fontSize: '36px', fontWeight: '800', background: 'linear-gradient(135deg, #6c63ff, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                        ₺{(istatistikler.monthlyRevenue || 0).toLocaleString()}
                     </div>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginTop: '8px' }}>Bu ayki gelir</p>
+                    <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '8px' }}>Bu ayki gelir</p>
                 </div>
-                <div className="glass-card animate-slide-up stagger-3">
-                    <h3 className="section-title">🎯 Hızlı İşlemler</h3>
+
+                {/* Hızlı İşlemler */}
+                <div className="kart anim-yukari kademe-3">
+                    <h3 className="bolum-bas">🎯 Hızlı İşlemler</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <a href="/admin/users" className="btn btn-secondary" style={{ justifyContent: 'center' }}>Kullanıcı Yönetimi</a>
-                        <a href="/admin/packages" className="btn btn-secondary" style={{ justifyContent: 'center' }}>Paket Yönetimi</a>
-                        <a href="/admin/reports" className="btn btn-secondary" style={{ justifyContent: 'center' }}>Raporları Görüntüle</a>
+                        <a href="/admin/users" className="dugme dugme-iki" style={{ justifyContent: 'center' }}>Kullanıcı Yönetimi</a>
+                        <a href="/admin/packages" className="dugme dugme-iki" style={{ justifyContent: 'center' }}>Paket Yönetimi</a>
+                        <a href="/admin/reports" className="dugme dugme-iki" style={{ justifyContent: 'center' }}>Raporları Görüntüle</a>
                     </div>
                 </div>
             </div>

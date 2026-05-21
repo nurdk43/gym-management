@@ -13,7 +13,10 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.0",
     "mongodb-memory-server": "^11.0.1",
-    "mongoose": "^8.9.5"
+    "mongoose": "^8.9.5",
+    "sequelize": "^6.37.8",
+    "sqlite3": "^5.1.7"
   }
 }

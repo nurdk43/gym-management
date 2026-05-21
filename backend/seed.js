@@ -5,17 +5,10 @@ const User = require('./models/User');
 
 async function seed() {
     try {
-        // DB bağlantısı (db.js ile aynı mantık)
-        try {
-            await mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 3000 });
-        } catch {
-            const { MongoMemoryServer } = require('mongodb-memory-server');
-            const dbPath = path.join(__dirname, 'data', 'db');
-            const mongod = await MongoMemoryServer.create({
-                instance: { dbPath, storageEngine: 'wiredTiger' }
-            });
-            await mongoose.connect(mongod.getUri());
-        }
+        // DB bağlantısı: mongodb-memory-server fallback bu ortamda çalışmadığı için
+        // doğrudan MONGO_URI üzerinden bağlanıyoruz.
+        const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27019/gym-management';
+        await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 3000 });
         console.log('DB bağlantısı başarılı');
 
         const users = [

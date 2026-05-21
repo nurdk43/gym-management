@@ -1,67 +1,83 @@
+// ==========================================
+// Kullanıcı Yönetimi Sayfası
+// Kullanıcıları listeleme, arama, düzenleme, silme
+// ==========================================
+
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import { FiEdit2, FiTrash2, FiSearch } from 'react-icons/fi';
 
 const UserManagement = () => {
-    const [users, setUsers] = useState([]);
-    const [search, setSearch] = useState('');
-    const [roleFilter, setRoleFilter] = useState('');
-    const [loading, setLoading] = useState(true);
-    const [editUser, setEditUser] = useState(null);
+    // ---- Durum Değişkenleri ----
+    const [kullanicilar, setKullanicilar] = useState([]);
+    const [arama, setArama] = useState('');
+    const [rolFiltre, setRolFiltre] = useState('');
+    const [yukleniyor, setYukleniyor] = useState(true);
+    const [duzenlenecek, setDuzenlenecek] = useState(null);
 
-    const fetchUsers = async () => {
-        try {
-            const params = {};
-            if (search) params.search = search;
-            if (roleFilter) params.role = roleFilter;
-            const res = await api.get('/admin/users', { params });
-            setUsers(res.data);
-        } catch (err) { console.error(err); }
-        setLoading(false);
+    const filtreParametreleri = () => {
+        const params = {};
+        if (arama) params.search = arama;
+        if (rolFiltre) params.role = rolFiltre;
+        return params;
     };
 
-    useEffect(() => { fetchUsers(); }, [search, roleFilter]);
+    // ---- Kullanıcıları API'den Getir ----
+    const kullanicilariGetir = async () => {
+        try {
+            const yanit = await api.get('/admin/users', { params: filtreParametreleri() });
+            setKullanicilar(yanit.data);
+        } catch (hata) { console.error(hata); }
+        setYukleniyor(false);
+    };
 
-    const handleDelete = async (id) => {
+    useEffect(() => { kullanicilariGetir(); }, [arama, rolFiltre]);
+
+    // ---- Kullanıcı Sil ----
+    const kullaniciSil = async (id) => {
         if (!confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?')) return;
         try {
             await api.delete(`/admin/users/${id}`);
-            setUsers(users.filter(u => u._id !== id));
-        } catch (err) { console.error(err); }
+            setKullanicilar(kullanicilar.filter(k => k._id !== id));
+        } catch (hata) { console.error(hata); }
     };
 
-    const handleUpdate = async (e) => {
+    // ---- Kullanıcı Güncelle ----
+    const kullaniciGuncelle = async (e) => {
         e.preventDefault();
         try {
-            const res = await api.put(`/admin/users/${editUser._id}`, editUser);
-            setUsers(users.map(u => u._id === editUser._id ? res.data : u));
-            setEditUser(null);
-        } catch (err) { console.error(err); }
+            const yanit = await api.put(`/admin/users/${duzenlenecek._id}`, duzenlenecek);
+            setKullanicilar(kullanicilar.map(k => k._id === duzenlenecek._id ? yanit.data : k));
+            setDuzenlenecek(null);
+        } catch (hata) { console.error(hata); }
     };
 
-    const getRoleBadge = (role) => {
-        const map = { admin: 'badge-purple', trainer: 'badge-info', member: 'badge-success' };
-        const labels = { admin: 'Admin', trainer: 'Antrenör', member: 'Üye' };
-        return <span className={`badge ${map[role]}`}>{labels[role]}</span>;
+    // ---- Rol Rozeti ----
+    const rolRozeti = (rol) => {
+        const renkler = { admin: 'rozet-mor', trainer: 'rozet-blg', member: 'rozet-bas' };
+        const etiketler = { admin: 'Admin', trainer: 'Antrenör', member: 'Üye' };
+        return <span className={`rozet ${renkler[rol]}`}>{etiketler[rol]}</span>;
     };
 
-    if (loading) return <div className="loading-spinner"><div className="spinner"></div></div>;
+    if (yukleniyor) return <div className="yukleme-kaps"><div className="yukleme"></div></div>;
 
     return (
-        <div className="animate-fade-in">
-            <div className="page-header">
+        <div className="anim-soluk">
+            {/* ---- Sayfa Başlığı ---- */}
+            <div className="sayfa-bas">
                 <div>
                     <h1>Kullanıcı Yönetimi</h1>
-                    <p>{users.length} kullanıcı bulundu</p>
+                    <p>{kullanicilar.length} kullanıcı bulundu</p>
                 </div>
             </div>
 
-            <div className="action-bar">
+            {/* ---- Arama ve Filtre ---- */}
+            <div className="aksiyon">
                 <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
-                    <FiSearch style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                    <input type="text" className="search-input" placeholder="İsim veya e-posta ara..." value={search} onChange={(e) => setSearch(e.target.value)} />
+                    <FiSearch style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                    <input type="text" className="arama" placeholder="İsim veya e-posta arama..." value={arama} onChange={(e) => setArama(e.target.value)} />
                 </div>
-                <select className="form-control" style={{ width: 'auto', minWidth: '150px' }} value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
+                <select className="form-kontrol" style={{ width: 'auto', minWidth: '150px' }} value={rolFiltre} onChange={(e) => setRolFiltre(e.target.value)}>
                     <option value="">Tüm Roller</option>
                     <option value="admin">Admin</option>
                     <option value="trainer">Antrenör</option>
@@ -69,8 +85,9 @@ const UserManagement = () => {
                 </select>
             </div>
 
-            <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
-                <table className="data-table">
+            {/* ---- Kullanıcı Tablosu ---- */}
+            <div className="kart" style={{ padding: 0, overflow: 'hidden' }}>
+                <table className="tablo">
                     <thead>
                         <tr>
                             <th>İsim</th>
@@ -82,57 +99,58 @@ const UserManagement = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(user => (
-                            <tr key={user._id}>
-                                <td style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>{user.phone || '-'}</td>
-                                <td>{getRoleBadge(user.role)}</td>
-                                <td><span className={`badge ${user.isActive ? 'badge-success' : 'badge-danger'}`}>{user.isActive ? 'Aktif' : 'Pasif'}</span></td>
+                        {kullanicilar.map(k => (
+                            <tr key={k._id}>
+                                <td style={{ color: '#f1f5f9', fontWeight: 500 }}>{k.name}</td>
+                                <td>{k.email}</td>
+                                <td>{k.phone || '-'}</td>
+                                <td>{rolRozeti(k.role)}</td>
+                                <td><span className={`rozet ${k.isActive ? 'rozet-bas' : 'rozet-teh'}`}>{k.isActive ? 'Aktif' : 'Pasif'}</span></td>
                                 <td>
                                     <div style={{ display: 'flex', gap: '8px' }}>
-                                        <button className="btn btn-secondary btn-sm" onClick={() => setEditUser({ ...user })}><FiEdit2 /></button>
-                                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(user._id)}><FiTrash2 /></button>
+                                        <button className="dugme dugme-iki dugme-kuc" onClick={() => setDuzenlenecek({ ...k })}><FiEdit2 /></button>
+                                        <button className="dugme dugme-teh dugme-kuc" onClick={() => kullaniciSil(k._id)}><FiTrash2 /></button>
                                     </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                {users.length === 0 && <div className="empty-state"><p>Kullanıcı bulunamadı</p></div>}
+                {kullanicilar.length === 0 && <div className="bos-durum"><p>Kullanıcı bulunamadı</p></div>}
             </div>
 
-            {editUser && (
-                <div className="modal-overlay" onClick={() => setEditUser(null)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div className="modal-header">
+            {/* ---- Düzenleme Modalı ---- */}
+            {duzenlenecek && (
+                <div className="modal-arka" onClick={() => setDuzenlenecek(null)}>
+                    <div className="modal-ic" onClick={e => e.stopPropagation()}>
+                        <div className="modal-bas">
                             <h2>Kullanıcı Düzenle</h2>
-                            <button className="modal-close" onClick={() => setEditUser(null)}>✕</button>
+                            <button className="modal-kapat" onClick={() => setDuzenlenecek(null)}>✕</button>
                         </div>
-                        <form onSubmit={handleUpdate}>
-                            <div className="form-group">
+                        <form onSubmit={kullaniciGuncelle}>
+                            <div className="form-grup">
                                 <label>İsim</label>
-                                <input type="text" className="form-control" value={editUser.name} onChange={e => setEditUser({ ...editUser, name: e.target.value })} />
+                                <input type="text" className="form-kontrol" value={duzenlenecek.name} onChange={e => setDuzenlenecek({ ...duzenlenecek, name: e.target.value })} />
                             </div>
-                            <div className="form-group">
+                            <div className="form-grup">
                                 <label>E-posta</label>
-                                <input type="email" className="form-control" value={editUser.email} onChange={e => setEditUser({ ...editUser, email: e.target.value })} />
+                                <input type="email" className="form-kontrol" value={duzenlenecek.email} onChange={e => setDuzenlenecek({ ...duzenlenecek, email: e.target.value })} />
                             </div>
-                            <div className="form-group">
+                            <div className="form-grup">
                                 <label>Telefon</label>
-                                <input type="tel" className="form-control" value={editUser.phone || ''} onChange={e => setEditUser({ ...editUser, phone: e.target.value })} />
+                                <input type="tel" className="form-kontrol" value={duzenlenecek.phone || ''} onChange={e => setDuzenlenecek({ ...duzenlenecek, phone: e.target.value })} />
                             </div>
-                            <div className="form-group">
+                            <div className="form-grup">
                                 <label>Rol</label>
-                                <select className="form-control" value={editUser.role} onChange={e => setEditUser({ ...editUser, role: e.target.value })}>
+                                <select className="form-kontrol" value={duzenlenecek.role} onChange={e => setDuzenlenecek({ ...duzenlenecek, role: e.target.value })}>
                                     <option value="member">Üye</option>
                                     <option value="trainer">Antrenör</option>
                                     <option value="admin">Admin</option>
                                 </select>
                             </div>
                             <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-                                <button type="submit" className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }}>Kaydet</button>
-                                <button type="button" className="btn btn-secondary" onClick={() => setEditUser(null)}>İptal</button>
+                                <button type="submit" className="dugme dugme-bir" style={{ flex: 1, justifyContent: 'center' }}>Kaydet</button>
+                                <button type="button" className="dugme dugme-iki" onClick={() => setDuzenlenecek(null)}>İptal</button>
                             </div>
                         </form>
                     </div>

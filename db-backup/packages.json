@@ -1,0 +1,74 @@
+[
+  {
+    "_id": "69c2acc439d4041f56cc552f",
+    "name": "6 Aylık Standart",
+    "description": "6 aylık ekonomik çözüm",
+    "price": 6000,
+    "durationDays": 180,
+    "maxClasses": 72,
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:52.001Z",
+    "updatedAt": "2026-03-24T15:29:57.971Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2acc439d4041f56cc552c",
+    "name": "Hafta Sonu Paketi",
+    "description": "Sadece Cumartesi-Pazar kullanımı",
+    "price": 3000,
+    "durationDays": 30,
+    "maxClasses": 8,
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:52.000Z",
+    "updatedAt": "2026-03-24T15:30:23.750Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2acc339d4041f56cc5529",
+    "name": "Öğrenci Paketi",
+    "description": "Öğrencilere özel indirimli aylık paket",
+    "price": 2000,
+    "durationDays": 30,
+    "maxClasses": 8,
+    "isActive": true,
+    "createdAt": "2026-03-24T15:24:51.998Z",
+    "updatedAt": "2026-03-24T15:30:28.566Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2a20739d4041f56cc53f2",
+    "name": "Yıllık VIP",
+    "description": "Yıllık sınırsız üyelik paketi",
+    "price": 10000,
+    "durationDays": 365,
+    "maxClasses": null,
+    "isActive": true,
+    "createdAt": "2026-03-24T14:39:03.459Z",
+    "updatedAt": "2026-03-24T15:30:35.450Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2a20739d4041f56cc53ef",
+    "name": "3 Aylık Premium",
+    "description": "3 aylık premium üyelik paketi",
+    "price": 6000,
+    "durationDays": 90,
+    "maxClasses": 48,
+    "isActive": true,
+    "createdAt": "2026-03-24T14:39:03.457Z",
+    "updatedAt": "2026-03-24T15:30:42.171Z",
+    "__v": 0
+  },
+  {
+    "_id": "69c2a20739d4041f56cc53ec",
+    "name": "Aylık Temel",
+    "description": "Aylık temel üyelik paketi",
+    "price": 1500,
+    "durationDays": 30,
+    "maxClasses": 12,
+    "isActive": true,
+    "createdAt": "2026-03-24T14:39:03.452Z",
+    "updatedAt": "2026-03-24T15:30:49.518Z",
+    "__v": 0
+  }
+]

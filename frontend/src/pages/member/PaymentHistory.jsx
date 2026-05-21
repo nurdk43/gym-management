@@ -1,52 +1,66 @@
+// ==========================================
+// Ödeme Geçmişi Sayfası (Üye)
+// Geçmiş ödemeleri tablo olarak listeler
+// ==========================================
+
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 
 const PaymentHistory = () => {
-    const [payments, setPayments] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // ---- Durum Değişkenleri ----
+    const [odemeler, setOdemeler] = useState([]);
+    const [yukleniyor, setYukleniyor] = useState(true);
 
+    // ---- Ödemeleri API'den Getir ----
     useEffect(() => {
-        const fetch = async () => {
-            try { const res = await api.get('/member/payments'); setPayments(res.data); } catch (err) { console.error(err); }
-            setLoading(false);
+        const odemeleriGetir = async () => {
+            try {
+                const yanit = await api.get('/member/payments');
+                setOdemeler(yanit.data);
+            } catch (hata) { console.error(hata); }
+            setYukleniyor(false);
         };
-        fetch();
+        odemeleriGetir();
     }, []);
 
-    const totalSpent = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
+    // ---- Toplam Harcama Hesapla ----
+    const toplamHarcama = odemeler.reduce((toplam, odeme) => toplam + (odeme.amount || 0), 0);
 
-    if (loading) return <div className="loading-spinner"><div className="spinner"></div></div>;
+    if (yukleniyor) return <div className="yukleme-kaps"><div className="yukleme"></div></div>;
 
     return (
-        <div className="animate-fade-in">
-            <div className="page-header"><div><h1>Ödeme Geçmişi</h1><p>Tüm ödemelerinizi görüntüleyin</p></div></div>
+        <div className="anim-soluk">
+            {/* ---- Sayfa Başlığı ---- */}
+            <div className="sayfa-bas"><div><h1>Ödeme Geçmişi</h1><p>Tüm ödemelerinizi görüntüleyin</p></div></div>
 
-            <div className="stats-grid" style={{ marginBottom: '24px' }}>
-                <div className="stat-card animate-slide-up">
-                    <div className="stat-icon yellow">💰</div>
-                    <div className="stat-info"><h3>₺{totalSpent.toLocaleString()}</h3><p>Toplam Harcama</p></div>
+            {/* ---- Özet Kartları ---- */}
+            <div className="istat-izgara" style={{ marginBottom: '24px' }}>
+                <div className="istat-kart anim-yukari">
+                    <div className="istat-ikon sari">💰</div>
+                    <div className="istat-bilgi"><h3>₺{toplamHarcama.toLocaleString()}</h3><p>Toplam Harcama</p></div>
                 </div>
-                <div className="stat-card animate-slide-up stagger-1">
-                    <div className="stat-icon blue">📝</div>
-                    <div className="stat-info"><h3>{payments.length}</h3><p>Toplam İşlem</p></div>
+                <div className="istat-kart anim-yukari kademe-1">
+                    <div className="istat-ikon mavi">📝</div>
+                    <div className="istat-bilgi"><h3>{odemeler.length}</h3><p>Toplam İşlem</p></div>
                 </div>
             </div>
 
-            <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
-                <table className="data-table">
+            {/* ---- Ödeme Tablosu ---- */}
+            <div className="kart" style={{ padding: 0, overflow: 'hidden' }}>
+                <table className="tablo">
                     <thead><tr><th>Paket</th><th>Tutar</th><th>Ödeme Yöntemi</th><th>Tarih</th></tr></thead>
                     <tbody>
-                        {payments.map(p => (
-                            <tr key={p._id}>
-                                <td style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{p.enrollment?.package?.name || '-'}</td>
-                                <td><span style={{ color: 'var(--success)', fontWeight: 600 }}>₺{p.amount?.toLocaleString()}</span></td>
-                                <td><span className="badge badge-info">{p.method === 'cash' ? 'Nakit' : p.method === 'card' ? 'Kredi Kartı' : 'Havale'}</span></td>
-                                <td>{new Date(p.paidAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</td>
+                        {odemeler.map(odeme => (
+                            <tr key={odeme._id}>
+                                <td style={{ color: '#f1f5f9', fontWeight: 500 }}>{odeme.enrollment?.package?.name || '-'}</td>
+                                <td><span style={{ color: '#34d399', fontWeight: 600 }}>₺{odeme.amount?.toLocaleString()}</span></td>
+                                <td><span className="rozet rozet-blg">{odeme.method === 'cash' ? 'Nakit' : odeme.method === 'card' ? 'Kredi Kartı' : 'Havale'}</span></td>
+                                <td>{new Date(odeme.paidAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                {payments.length === 0 && <div className="empty-state"><div className="empty-icon">💳</div><h3>Ödeme kaydı yok</h3><p>Henüz bir ödeme işlemi gerçekleştirmediniz</p></div>}
+                {odemeler.length === 0 && <div className="bos-durum"><div className="bos-ikon">💳</div><h3>Ödeme kaydı yok</h3><p>Henüz bir ödeme işlemi gerçekleştirmediniz</p></div>}
             </div>
         </div>
     );

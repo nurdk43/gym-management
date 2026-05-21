@@ -1,99 +1,112 @@
+// ==========================================
+// Derslerim Sayfası (Üye)
+// Kayıtlı dersler ve tüm dersler sekmeli görünümü
+// ==========================================
+
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import { FiPlus, FiX } from 'react-icons/fi';
 
 const MyClasses = () => {
-    const [allClasses, setAllClasses] = useState([]);
-    const [myClasses, setMyClasses] = useState([]);
-    const [tab, setTab] = useState('my');
-    const [loading, setLoading] = useState(true);
+    // ---- Durum Değişkenleri ----
+    const [tumDersler, setTumDersler] = useState([]);
+    const [kayitliDersler, setKayitliDersler] = useState([]);
+    const [aktifSekme, setAktifSekme] = useState('kayitli');
+    const [yukleniyor, setYukleniyor] = useState(true);
 
-    const fetchData = async () => {
+    // ---- Verileri API'den Getir ----
+    const verileriGetir = async () => {
         try {
-            const [allRes, myRes] = await Promise.all([
+            const [tumYanit, kayitliYanit] = await Promise.all([
                 api.get('/member/classes'),
                 api.get('/member/my-classes')
             ]);
-            setAllClasses(allRes.data);
-            setMyClasses(myRes.data);
-        } catch (err) { console.error(err); }
-        setLoading(false);
+            setTumDersler(tumYanit.data);
+            setKayitliDersler(kayitliYanit.data);
+        } catch (hata) { console.error(hata); }
+        setYukleniyor(false);
     };
 
-    useEffect(() => { fetchData(); }, []);
+    useEffect(() => { verileriGetir(); }, []);
 
-    const handleEnroll = async (programId) => {
+    // ---- Derse Kayıt Ol ----
+    const derseKaydol = async (programId) => {
         try {
             await api.post('/member/classes/enroll', { programId });
             alert('Derse başarıyla kaydoldunuz! 🎉');
-            fetchData();
-        } catch (err) { alert(err.response?.data?.message || 'Bir hata oluştu'); }
+            verileriGetir();
+        } catch (hata) { alert(hata.response?.data?.message || 'Bir hata oluştu'); }
     };
 
-    const handleCancel = async (programId) => {
+    // ---- Dersten Çık ----
+    const derstenCik = async (programId) => {
         if (!confirm('Dersten çıkmak istediğinize emin misiniz?')) return;
         try {
             await api.delete(`/member/classes/${programId}`);
-            fetchData();
-        } catch (err) { console.error(err); }
+            verileriGetir();
+        } catch (hata) { console.error(hata); }
     };
 
-    if (loading) return <div className="loading-spinner"><div className="spinner"></div></div>;
+    if (yukleniyor) return <div className="yukleme-kaps"><div className="yukleme"></div></div>;
 
     return (
-        <div className="animate-fade-in">
-            <div className="page-header"><div><h1>Derslerim</h1><p>Ders kayıt ve iptal işlemleri</p></div></div>
+        <div className="anim-soluk">
+            {/* ---- Sayfa Başlığı ---- */}
+            <div className="sayfa-bas"><div><h1>Derslerim</h1><p>Ders kayıt ve iptal işlemleri</p></div></div>
 
-            <div className="action-bar">
-                <button className={`btn ${tab === 'my' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setTab('my')}>Kayıtlı Derslerim ({myClasses.length})</button>
-                <button className={`btn ${tab === 'all' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setTab('all')}>Tüm Dersler ({allClasses.length})</button>
+            {/* ---- Sekme Butonları ---- */}
+            <div className="aksiyon">
+                <button className={`dugme ${aktifSekme === 'kayitli' ? 'dugme-bir' : 'dugme-iki'}`} onClick={() => setAktifSekme('kayitli')}>Kayıtlı Derslerim ({kayitliDersler.length})</button>
+                <button className={`dugme ${aktifSekme === 'tum' ? 'dugme-bir' : 'dugme-iki'}`} onClick={() => setAktifSekme('tum')}>Tüm Dersler ({tumDersler.length})</button>
             </div>
 
-            {tab === 'my' && (
-                <div className="package-grid">
-                    {myClasses.map((cls, i) => (
-                        <div key={cls._id} className="glass-card animate-slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
+            {/* ---- Kayıtlı Dersler Sekmesi ---- */}
+            {aktifSekme === 'kayitli' && (
+                <div className="paket-izgara">
+                    {kayitliDersler.map((ders, i) => (
+                        <div key={ders._id} className="kart anim-yukari" style={{ animationDelay: `${i * 0.1}s` }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                                <h3 style={{ fontSize: '18px', fontWeight: 600 }}>{cls.title}</h3>
-                                <span className="badge badge-success">Kayıtlı</span>
+                                <h3 style={{ fontSize: '18px', fontWeight: 600 }}>{ders.title}</h3>
+                                <span className="rozet rozet-bas">Kayıtlı</span>
                             </div>
-                            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginTop: '8px' }}>{cls.description || ''}</p>
-                            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px', color: 'var(--text-secondary)' }}>
-                                <span>📅 {cls.dayOfWeek} - 🕐 {cls.time}</span>
-                                <span>👤 Antrenör: {cls.trainer?.name}</span>
+                            <p style={{ color: '#94a3b8', fontSize: '13px', marginTop: '8px' }}>{ders.description || ''}</p>
+                            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px', color: '#94a3b8' }}>
+                                <span>📅 {ders.dayOfWeek} - 🕐 {ders.time}</span>
+                                <span>👤 Antrenör: {ders.trainer?.name}</span>
                             </div>
-                            <button className="btn btn-danger" style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }} onClick={() => handleCancel(cls._id)}><FiX /> Dersten Çık</button>
+                            <button className="dugme dugme-teh" style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }} onClick={() => derstenCik(ders._id)}><FiX /> Dersten Çık</button>
                         </div>
                     ))}
-                    {myClasses.length === 0 && <div className="glass-card" style={{ gridColumn: '1/-1' }}><div className="empty-state"><div className="empty-icon">📚</div><h3>Kayıtlı ders yok</h3><p>Tüm dersler sekmesinden derse kaydolun</p></div></div>}
+                    {kayitliDersler.length === 0 && <div className="kart" style={{ gridColumn: '1/-1' }}><div className="bos-durum"><div className="bos-ikon">📚</div><h3>Kayıtlı ders yok</h3><p>Tüm dersler sekmesinden derse kaydolun</p></div></div>}
                 </div>
             )}
 
-            {tab === 'all' && (
-                <div className="package-grid">
-                    {allClasses.map((cls, i) => {
-                        const isEnrolled = myClasses.some(m => m._id === cls._id);
-                        const isFull = cls.enrolledMembers?.length >= cls.maxCapacity;
+            {/* ---- Tüm Dersler Sekmesi ---- */}
+            {aktifSekme === 'tum' && (
+                <div className="paket-izgara">
+                    {tumDersler.map((ders, i) => {
+                        const kayitliMi = kayitliDersler.some(k => k._id === ders._id);
+                        const doluMu = ders.enrolledMembers?.length >= ders.maxCapacity;
                         return (
-                            <div key={cls._id} className="glass-card animate-slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
+                            <div key={ders._id} className="kart anim-yukari" style={{ animationDelay: `${i * 0.1}s` }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                                    <h3 style={{ fontSize: '18px', fontWeight: 600 }}>{cls.title}</h3>
-                                    {isFull ? <span className="badge badge-danger">Dolu</span> : <span className="badge badge-info">{cls.enrolledMembers?.length}/{cls.maxCapacity}</span>}
+                                    <h3 style={{ fontSize: '18px', fontWeight: 600 }}>{ders.title}</h3>
+                                    {doluMu ? <span className="rozet rozet-teh">Dolu</span> : <span className="rozet rozet-blg">{ders.enrolledMembers?.length}/{ders.maxCapacity}</span>}
                                 </div>
-                                <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginTop: '8px' }}>{cls.description || ''}</p>
-                                <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px', color: 'var(--text-secondary)' }}>
-                                    <span>📅 {cls.dayOfWeek} - 🕐 {cls.time}</span>
-                                    <span>👤 Antrenör: {cls.trainer?.name}</span>
+                                <p style={{ color: '#94a3b8', fontSize: '13px', marginTop: '8px' }}>{ders.description || ''}</p>
+                                <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px', color: '#94a3b8' }}>
+                                    <span>📅 {ders.dayOfWeek} - 🕐 {ders.time}</span>
+                                    <span>👤 Antrenör: {ders.trainer?.name}</span>
                                 </div>
-                                {isEnrolled ? (
-                                    <button className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }} disabled>✓ Zaten Kayıtlısınız</button>
+                                {kayitliMi ? (
+                                    <button className="dugme dugme-iki" style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }} disabled>✓ Zaten Kayıtlısınız</button>
                                 ) : (
-                                    <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }} onClick={() => handleEnroll(cls._id)} disabled={isFull}><FiPlus /> {isFull ? 'Kapasite Dolu' : 'Kaydol'}</button>
+                                    <button className="dugme dugme-bir" style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }} onClick={() => derseKaydol(ders._id)} disabled={doluMu}><FiPlus /> {doluMu ? 'Kapasite Dolu' : 'Kaydol'}</button>
                                 )}
                             </div>
                         );
                     })}
-                    {allClasses.length === 0 && <div className="glass-card" style={{ gridColumn: '1/-1' }}><div className="empty-state"><div className="empty-icon">📚</div><h3>Henüz ders yok</h3><p>Antrenörler tarafından ders oluşturulduğunda burada görünecek</p></div></div>}
+                    {tumDersler.length === 0 && <div className="kart" style={{ gridColumn: '1/-1' }}><div className="bos-durum"><div className="bos-ikon">📚</div><h3>Henüz ders yok</h3><p>Antrenörler tarafından ders oluşturulduğunda burada görünecek</p></div></div>}
                 </div>
             )}
         </div>

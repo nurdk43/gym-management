@@ -1,86 +1,98 @@
+// ==========================================
+// Devam Takibi Sayfası (Antrenör)
+// Üyelerin giriş/çıkış yoklamasını yönetir
+// ==========================================
+
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import { FiUserPlus, FiLogOut } from 'react-icons/fi';
 
 const AttendanceTracker = () => {
-    const [members, setMembers] = useState([]);
-    const [attendance, setAttendance] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-    const [loading, setLoading] = useState(true);
+    // ---- Durum Değişkenleri ----
+    const [uyeler, setUyeler] = useState([]);
+    const [yoklama, setYoklama] = useState([]);
+    const [secilenTarih, setSecilenTarih] = useState(new Date().toISOString().split('T')[0]);
+    const [yukleniyor, setYukleniyor] = useState(true);
 
+    // ---- Üyeleri ve Yoklama Kayıtlarını Getir ----
     useEffect(() => {
-        const fetch = async () => {
+        const verileriGetir = async () => {
             try {
-                const [membersRes, attendanceRes] = await Promise.all([
+                const [uyelerYanit, yoklamaYanit] = await Promise.all([
                     api.get('/trainer/members'),
-                    api.get('/trainer/attendance', { params: { date: selectedDate } })
+                    api.get('/trainer/attendance', { params: { date: secilenTarih } })
                 ]);
-                setMembers(membersRes.data);
-                setAttendance(attendanceRes.data);
-            } catch (err) { console.error(err); }
-            setLoading(false);
+                setUyeler(uyelerYanit.data);
+                setYoklama(yoklamaYanit.data);
+            } catch (hata) { console.error(hata); }
+            setYukleniyor(false);
         };
-        fetch();
-    }, [selectedDate]);
+        verileriGetir();
+    }, [secilenTarih]);
 
-    const handleCheckIn = async (userId) => {
+    // ---- Giriş Kaydı Oluştur ----
+    const girisKaydet = async (uyeId) => {
         try {
-            const res = await api.post('/trainer/attendance', { userId });
-            setAttendance([res.data, ...attendance]);
-        } catch (err) { console.error(err); }
+            const yanit = await api.post('/trainer/attendance', { userId: uyeId });
+            setYoklama([yanit.data, ...yoklama]);
+        } catch (hata) { console.error(hata); }
     };
 
-    const handleCheckOut = async (id) => {
+    // ---- Çıkış Kaydı Oluştur ----
+    const cikisKaydet = async (id) => {
         try {
-            const res = await api.put(`/trainer/attendance/${id}/checkout`);
-            setAttendance(attendance.map(a => a._id === id ? res.data : a));
-        } catch (err) { console.error(err); }
+            const yanit = await api.put(`/trainer/attendance/${id}/checkout`);
+            setYoklama(yoklama.map(k => k._id === id ? yanit.data : k));
+        } catch (hata) { console.error(hata); }
     };
 
-    if (loading) return <div className="loading-spinner"><div className="spinner"></div></div>;
+    if (yukleniyor) return <div className="yukleme-kaps"><div className="yukleme"></div></div>;
 
     return (
-        <div className="animate-fade-in">
-            <div className="page-header">
+        <div className="anim-soluk">
+            {/* ---- Sayfa Başlığı ve Tarih Seçici ---- */}
+            <div className="sayfa-bas">
                 <div><h1>Devam Takibi</h1><p>Üye giriş/çıkış kayıtlarını yönetin</p></div>
-                <input type="date" className="form-control" style={{ width: 'auto' }} value={selectedDate} onChange={e => setSelectedDate(e.target.value)} />
+                <input type="date" className="form-kontrol" style={{ width: 'auto' }} value={secilenTarih} onChange={e => setSecilenTarih(e.target.value)} />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px' }}>
-                <div className="glass-card">
-                    <h3 className="section-title">👥 Üyeler</h3>
+                {/* ---- Üye Listesi ---- */}
+                <div className="kart">
+                    <h3 className="bolum-bas">👥 Üyeler</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '500px', overflowY: 'auto' }}>
-                        {members.map(m => (
-                            <div key={m._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'var(--bg-glass)', borderRadius: '8px', border: '1px solid var(--border-glass)' }}>
+                        {uyeler.map(uye => (
+                            <div key={uye._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
                                 <div>
-                                    <div style={{ fontWeight: 500, fontSize: '14px' }}>{m.name}</div>
-                                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{m.email}</div>
+                                    <div style={{ fontWeight: 500, fontSize: '14px' }}>{uye.name}</div>
+                                    <div style={{ fontSize: '12px', color: '#64748b' }}>{uye.email}</div>
                                 </div>
-                                <button className="btn btn-success btn-sm" onClick={() => handleCheckIn(m._id)}><FiUserPlus /></button>
+                                <button className="dugme dugme-bas dugme-kuc" onClick={() => girisKaydet(uye._id)}><FiUserPlus /></button>
                             </div>
                         ))}
-                        {members.length === 0 && <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Üye bulunamadı</p>}
+                        {uyeler.length === 0 && <p style={{ color: '#64748b', fontSize: '14px' }}>Üye bulunamadı</p>}
                     </div>
                 </div>
 
-                <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
-                    <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border-glass)' }}>
-                        <h3 className="section-title" style={{ margin: 0 }}>📋 Bugünkü Kayıtlar ({attendance.length})</h3>
+                {/* ---- Yoklama Tablosu ---- */}
+                <div className="kart" style={{ padding: 0, overflow: 'hidden' }}>
+                    <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                        <h3 className="bolum-bas" style={{ margin: 0 }}>📋 Bugünkü Kayıtlar ({yoklama.length})</h3>
                     </div>
-                    <table className="data-table">
+                    <table className="tablo">
                         <thead><tr><th>Üye</th><th>Giriş</th><th>Çıkış</th><th>İşlem</th></tr></thead>
                         <tbody>
-                            {attendance.map(a => (
-                                <tr key={a._id}>
-                                    <td style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{a.user?.name}</td>
-                                    <td>{new Date(a.checkIn).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</td>
-                                    <td>{a.checkOut ? new Date(a.checkOut).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : <span className="badge badge-warning">Devam ediyor</span>}</td>
-                                    <td>{!a.checkOut && <button className="btn btn-danger btn-sm" onClick={() => handleCheckOut(a._id)}><FiLogOut /> Çıkış</button>}</td>
+                            {yoklama.map(kayit => (
+                                <tr key={kayit._id}>
+                                    <td style={{ color: '#f1f5f9', fontWeight: 500 }}>{kayit.user?.name}</td>
+                                    <td>{new Date(kayit.checkIn).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</td>
+                                    <td>{kayit.checkOut ? new Date(kayit.checkOut).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : <span className="rozet rozet-uyr">Devam ediyor</span>}</td>
+                                    <td>{!kayit.checkOut && <button className="dugme dugme-teh dugme-kuc" onClick={() => cikisKaydet(kayit._id)}><FiLogOut /> Çıkış</button>}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    {attendance.length === 0 && <div className="empty-state"><p>Bugün için kayıt yok</p></div>}
+                    {yoklama.length === 0 && <div className="bos-durum"><p>Bugün için kayıt yok</p></div>}
                 </div>
             </div>
         </div>

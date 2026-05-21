@@ -1,30 +1,33 @@
+// ==========================================
+// Kullanıcı Modeli
+// Admin, antrenör ve üye rollerini tanımlar
+// ==========================================
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
-    name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    password: { type: String, required: true, minlength: 6 },
-    role: { type: String, enum: ['admin', 'trainer', 'member'], default: 'member' },
-    phone: { type: String, trim: true },
-    isActive: { type: Boolean, default: true }
-}, { timestamps: true });
-
-userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
+// ---- Kullanıcı Şeması ----
+const kullaniciSemasi = new mongoose.Schema({
+    name: { type: String, required: true, trim: true },                              // Ad-Soyad
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true }, // E-posta
+    password: { type: String, required: true, minlength: 6 },                             // Şifre (hashlenmiş)
+    role: { type: String, enum: ['admin', 'trainer', 'member'], default: 'member' },  // Rol
+    phone: { type: String, trim: true },                                               // Telefon
+    isActive: { type: Boolean, default: true }                                            // Aktiflik durumu
+}, {
+    timestamps: true  // createdAt ve updatedAt otomatik oluşturulur
 });
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+// ---- Kayıt Öncesi: Şifreyi Hashle ----
+kullaniciSemasi.pre('save', async function (sonraki) {
+    if (!this.isModified('password')) return sonraki();
+    const tuz = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, tuz);
+});
+
+// ---- Şifre Karşılaştırma Metodu ----
+kullaniciSemasi.methods.sifreKarsilastir = async function (girilenSifre) {
+    return await bcrypt.compare(girilenSifre, this.password);
 };
 
-userSchema.methods.toJSON = function () {
-    const obj = this.toObject();
-    delete obj.password;
-    return obj;
-};
-
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', kullaniciSemasi);

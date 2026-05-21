@@ -1,31 +1,51 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+// ==========================================
+// GymPro - Ana Sunucu Dosyası
+// Express.js tabanlı REST API sunucusu
+// ==========================================
 
+const dotenv = require('dotenv');
+// ---- Ortam Değişkenlerini Yükle (EN BAŞTA) ----
 dotenv.config();
 
-const app = express();
+const express = require('express');
+const cors = require('cors');
+const { ensureDatabaseExists } = require('./db/bootstrap-mysql');
+const { initDB, getSequelize } = require('./db/sequelize');
+require('./db/models'); // association'ları yükle
+const { errorHandler } = require('./middleware/errorHandler');
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// ---- Express Uygulamasını Oluştur ----
+const uygulama = express();
+const PORT = process.env.PORT || 5001;
 
-// Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/admin', require('./routes/admin'));
-app.use('/api/trainer', require('./routes/trainer'));
-app.use('/api/member', require('./routes/member'));
+// ---- Middleware'ler ----
+uygulama.use(cors());                    // Çapraz kaynak isteklerine izin ver
+uygulama.use(express.json());            // JSON gövde ayrıştırma
 
-// Health check
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
+// ---- API Rotaları ----
+uygulama.use('/api/auth', require('./routes/auth'));         // Kimlik doğrulama (giriş/kayıt)
+uygulama.use('/api/admin', require('./routes/admin'));       // Yönetici işlemleri
+uygulama.use('/api/trainer', require('./routes/trainer'));   // Antrenör işlemleri
+uygulama.use('/api/member', require('./routes/member'));     // Üye işlemleri
 
-const PORT = process.env.PORT || 5000;
+// ---- Sunucuyu Başlat ----
+const sunucuyuBaslat = async () => {
+    // MySQL DB yoksa oluştur
+    await ensureDatabaseExists();
 
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+    // Sequelize bağlantısı
+    await initDB();
+
+    // Dev ortamı için tablo sync (prod'da migration önerilir)
+    const sequelize = getSequelize();
+    await sequelize.sync();
+
+    uygulama.listen(PORT, () => {
+        console.log(`🚀 GymPro sunucusu ${PORT} portunda çalışıyor`);
     });
-});
+};
+
+sunucuyuBaslat();
+
+// ---- Hata middleware (en sonda) ----
+uygulama.use(errorHandler);
